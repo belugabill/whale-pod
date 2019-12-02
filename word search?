@@ -1,0 +1,188 @@
+Introduction
+In word search puzzles, words can be written horizontally and vertically (see Assignment 4), as well as diagonally. In the following puzzle:
+
+E	A	R	N	S
+S	N	R	M	W
+A	Z	A	I	E
+E	E	T	H	A
+T	H	G	I	T
+ EARNS  appears at [0][0] written towards the right,  TIGHT  appears at [4][4] written towards the left:
+
+[["E", "A", "R", "N", "S"],
+ ["S", "N", "R", "M", "W"],
+ ["A", "Z", "A", "I", "E"],
+ ["E", "E", "T", "H", "A"],
+ ["T", "H", "G", "I", "T"]]
+ SWEAT  appears at [0][4] written downwards,  TEASE  appears at [4][0] written upwards:
+
+[["E", "A", "R", "N", "S"],
+ ["S", "N", "R", "M", "W"],
+ ["A", "Z", "A", "I", "E"],
+ ["E", "E", "T", "H", "A"],
+ ["T", "H", "G", "I", "T"]]
+ ARIA  appears at [0][1] written downwards and to the right,  THANE  appears at [4][4] written upwards and to the left:
+
+[["E", "A", "R", "N", "S"],
+ ["S", "N", "R", "M", "W"],
+ ["A", "Z", "A", "I", "E"],
+ ["E", "E", "T", "H", "A"],
+ ["T", "H", "G", "I", "T"]]
+Finally,  TEAMS  appears at [4][0] written upwards and to the right,  WITH  appears at [1][4] written downwards and to the left:
+
+[["E", "A", "R", "N", "S"],
+ ["S", "N", "R", "M", "W"],
+ ["A", "Z", "A", "I", "E"],
+ ["E", "E", "T", "H", "A"],
+ ["T", "H", "G", "I", "T"]]
+Your function must look for the given word in all these directions: right, left, up, down, up-to-right, down-to-right, up-to-left, and down-to-left.
+
+Direction Constants: As in assignment 4, there are constants supplied in the starter code representing the possible directions. In the following grid, if the word begins with X, the direction constants represent the direction in which the word is written from X. The numbers below are the amount to add/subtract from X's row, col to get to that cell (for example, DIR_R, move to the right, add 0 to the row and 1 to the column):
+
+DIR_UL
+-1,-1	DIR_U
+-1,0	DIR_UR
+-1,1
+DIR_L
+0,-1	X	DIR_R
+0,1
+DIR_DL
+1,-1	DIR_D
+1,0	DIR_DR
+1,1
+Details for function findWord()
+Function Parameters (Input)
+puzzle (list): The word search puzzle (a table—a list of lists—with the same number of rows as columns).
+word (string): The word to find written in the puzzle (all words will be uppercase).
+Processing
+Determine if word is in puzzle, written in any of the directions discussed above.
+This can be accomplished at least a couple of different ways:
+You could copy and paste findHorizonal() and findVeritcal() from Assignment 4 and write a findDiagonal() function. Then have findWord() call each in turn. If one of them finds the word, return the values.
+or...
+You could write an entirely new function that finds the first letter of word in the puzzle, then checks all surrounding cells for the next letter.
+Function Return Value (Output)
+If word is found, return a dictionary with 'row', 'column', and 'direction' as show in the examples below.
+If word is NOT found, return None, the special Python type representing the absence of a value.
+Sample Input/Output
+Puzzle	Notes
+
+ [["E", "A", "R", "N", "S"], 
+  ["S", "N", "R", "M", "W"],
+  ["A", "Z", "A", "I", "E"],
+  ["E", "E", "T", "H", "A"],
+  ["T", "H", "G", "I", "T"]]
+ 	
+ Call: findWord(myPuzz, "EARNS") 
+
+ Return: {"row": 0, "column": 0, "direction": DIR_R} 
+
+
+ [["E", "A", "R", "N", "S"], 
+  ["S", "N", "R", "M", "W"],
+  ["A", "Z", "A", "I", "E"],
+  ["E", "E", "T", "H", "A"],
+  ["T", "H", "G", "I", "T"]]
+ 	
+ Call: findWord(myPuzz, "TEASE") 
+
+ Return: {"row": 4, "column": 0, "direction": DIR_U} 
+
+
+ [["E", "A", "R", "N", "S"], 
+  ["S", "N", "R", "M", "W"],
+  ["A", "Z", "A", "I", "E"],
+  ["E", "E", "T", "H", "A"],
+  ["T", "H", "G", "I", "T"]]
+ 	
+ Call: findWord(myPuzz, "THANE") 
+
+ Return: {"row": 4, "column": 4, "direction": DIR_UL} 
+
+
+ [["E", "A", "R", "N", "S"], 
+  ["S", "N", "R", "M", "W"],
+  ["A", "Z", "A", "I", "E"],
+  ["E", "E", "T", "H", "A"],
+  ["T", "H", "G", "I", "T"]]
+ 	
+ Call: findWord(myPuzz, "ZEBRA") 
+
+ Return: None 
+ 
+ 
+ ############################################
+#### DO NOT CHANGE CODE INSIDE THIS BOX ####
+############################################
+# Direction constants                      #
+DIR_U = 0                                  #
+DIR_UR = 1                                 #
+DIR_R = 2                                  #
+DIR_DR = 3                                 #
+DIR_D = 4                                  #
+DIR_DL = 5                                 #
+DIR_L = 6                                  #
+DIR_UL = 7                                 #
+                                           #
+DIRS = [(-1,0),                            #
+        (-1,1),                            #
+        (0,1),                             #
+        (1,1),                             #
+        (1,0),                             #
+        (1,-1),                            #
+        (0,-1),                            #
+        (-1,-1)]                           #
+                                           #
+# Create the puzzle table                  #
+myPuzz = [input()]                         #
+myPuzz[0] = myPuzz[0].split(" ")           #
+for i in range(1,len(myPuzz[0])):          #
+    myPuzz.append(input())                 #
+    myPuzz[-1] = myPuzz[-1].split(" ")     #
+                                           #
+# Get the words to test                    #
+wordList = []                              #
+wordRead = input()                         #
+while wordRead != "STOP!":                 #
+    wordList.append(wordRead)              #
+    wordRead = input()                     #
+############################################
+
+
+
+################## WRITE YOUR CODE AFTER THIS LINE ###################
+
+#### my code basically only tests for horizontals. im so lost here ###
+def findWord(puzzle, word):
+   row = len(puzzle)
+   # Get reverse of word incase not fround forwards
+   reversedWord = word[::-1]
+   # for loop that will check through the range of row values and look for word (and reversed word)
+   for wordIn in range(row):
+       newPuzzle = ''.join(puzzle[wordIn])
+       checkForWord = newPuzzle.find(word)
+       # Word not found, do reverse
+       if checkForWord == -1:
+           checkForWord = newPuzzle.find(reversedWord)
+           # Word found
+           if checkForWord != -1:
+               return {'row': wordIn, 'col': checkForWord+len(reversedWord)-1, 'direction': DIR_L}
+       # Found not reversed
+       else:
+           return {'row': wordIn, 'col': checkForWord, 'direction': DIR_R}
+   return None
+
+
+################## WRITE YOUR CODE ABOVE THIS LINE ###################
+
+
+
+##################################################
+####### DO NOT CHANGE CODE INSIDE THIS BOX #######
+##################################################
+for word in wordList:                            #
+    print(word, findWord(myPuzz, word))          #
+                                                 #
+for rowList in myPuzz:                           #
+    for char in rowList:                         #
+        print(char+" ", end="")                  #
+    print()                                      #
+##################################################
