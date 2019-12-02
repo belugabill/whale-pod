@@ -1,0 +1,177 @@
+Introduction
+In this assignment, you are going to help generate a word search puzzle. If you are not familiar with word search puzzles, you can find out more information here: https://en.wikipedia.org/wiki/Word_search
+
+In problem 1, you will write a function, willWordFitH(), which will determine whether or not a given word can fit into a word search puzzle horizontally starting at given row and column indexes.
+
+For this problem, the puzzle grid has been created for you. It is an N×N table (a list of lists), in which N is both the number of rows and the number of columns (the table forms a square). Each cell is a single character, and all empty cells have been initialized to a period (.). For example, initially a 5x5 grid would look like the following:
+
+[[".", ".", ".", ".", "."],
+ [".", ".", ".", ".", "."],
+ [".", ".", ".", ".", "."],
+ [".", ".", ".", ".", "."],
+ [".", ".", ".", ".", "."]]
+First, the word can fit into the puzzle if it is NOT too long for the row. For example,
+
+If the row is 5 cells wide and the word is "CAT", it could fit starting at column index 0, 1, or 2:
+["C", "A", "T", ".", "."]
+[".", "C", "A", "T", "."]
+[".", ".", "C", "A", "T"]
+However, the word would be too long if it starts at column index 3 or 4:
+[".", ".", ".", "C", "A"]
+[".", ".", ".", ".", "C"]
+If the word is "ZEBRA", it could fit in the row 5 cells wide starting at column 0 only:
+["Z", "E", "B", "R", "A"]
+Starting at any other column would make the word too long to fit.
+Second, words can overlap if they share letters:
+
+For example, in the following row, there is no room left for "CAT" starting at column index 2, because the cell at column index 2 already holds a "G":
+["D", "O", "G", ".", "."]
+However, there is room for "GOT" starting at column index 2, because the cell already contains "G", which is the last letter of "DOG" and the first letter of "GOT". That is, the two words can share the letter "G", so the following is legal:
+["D", "O", "G", "O", "T"]
+Details for function willWordFitH()
+Parameter Variables (Input)
+puzzle (list): The word search puzzle (a table—a list of lists—with the same number of rows as columns). Remember, this is a reference to the list. Changes made in the function are made to the actual table.
+word (string): The word to test for inclusion in the puzzle (all words will be uppercase)
+row (integer): The row index at which to place word in the puzzle table
+col (integers): The column index at which to place word in the puzzle table
+Processing
+Test word to see if it can fit into puzzle.
+You CANNOT add word to puzzle:
+If word is too long to fit into the grid horizontally, starting at index [row][column] (see Introduction for examples)
+If word overlaps with another word already in the puzzle but does NOT share the same letters (see Introduction for examples)
+Otherwise, add the word to puzzle.
+Return Value (Output)
+Return:
+True if word was added into puzzle at [row][column]
+False if it was not added
+Sample Input/Output
+Before	Notes	After
+ [[".", ".", ".", "."], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]	
+We want to add "CAT" to myPuzz at [0][1]
+
+Call: willWordFitH(myPuzz, "CAT", 0, 1)
+
+Return: True. "CAT" has been added to myPuzz because there was room.
+
+ [[".", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]
+ [[".", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]	
+Now we want to add "DOG" at [0][1].
+
+Call: willWordFitH(myPuzz, "DOG", 0, 1)
+
+Return: False. Grid remains unchanged because "CAT" already exists where we wanted to place "DOG".
+
+ [[".", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]
+ [[".", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]	
+Now we want to add "SCAT" at [0][0].
+
+Call: willWordFitH(myPuzz, "SCAT", 0, 0)
+
+Return: True. Grid has been updated since there is room for "SCAT" since it shares letters with "CAT".
+
+ [["S", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]
+ [["S", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]	
+Finally we want to add "ZEBRA" at [2][0].
+
+Call: willWordFitH(myPuzz, "ZEBRA", 2, 0)
+
+Return: False. Grid remains unchanged because "ZEBRA" will not fit starting at [1][0].
+
+ [["S", "C", "A", "T"], 
+  [".", ".", ".", "."],
+  [".", ".", ".", "."],
+  [".", ".", ".", "."]]
+  
+  ######################################################################
+################# DO NOT CHANGE CODE INSIDE THIS BOX #################
+######################################################################
+numSize = int(input())                                               #
+numRows = int(input())                                               #
+                                                                     #
+wordList = []                                                        #
+for i in range(numRows):                                             #
+    wordList.append(input().split(" "))                              #
+    wordList[len(wordList)-1][1] = int(wordList[len(wordList)-1][1]) #
+    wordList[len(wordList)-1][2] = int(wordList[len(wordList)-1][2]) #
+                                                                     #
+myPuzz = []                                                          #
+for i in range(numSize):                                             #
+    myPuzz.append( ['.'] * numSize )                                 # 
+######################################################################
+
+
+
+################## WRITE YOUR CODE AFTER THIS LINE ###################
+
+
+
+def willWordFitH(myPuzz, word, row, col):
+    # List to store words added in
+    listWords = []
+    # Appending the word to the new list as it should go into the puzzle
+    for i in range(col):
+        listWords.append('.')
+    tempList = list(word)
+    for i in tempList:
+        listWords.append(i)
+        # Checking length of puzzle versus length of word
+    if len(myPuzz[row][col:]) >= len(tempList)-1:
+        tempList = myPuzz[row]
+        for i in range(len(tempList)):
+            # If character is a . we can use it and replace it
+            if tempList[i] == '.':
+                continue
+            # if character is equal to character we want to add into puzzle, do it
+            elif listWords[i-1] == tempList[i-1]:
+                continue
+            # if theyre not equal, get em outta here
+            else:
+                return False
+        else:
+            count = listWords.count('.')
+            for i in range(count):
+                listWords.remove('.')
+            for i in listWords:
+                myPuzz[row][col] = i
+                col += 1
+            return True
+    else:
+        return False
+
+
+################## WRITE YOUR CODE ABOVE THIS LINE ###################
+
+
+
+######################################################################
+################# DO NOT CHANGE CODE INSIDE THIS BOX #################
+######################################################################
+for words in wordList:                                               #
+    print(willWordFitH(myPuzz, words[0], words[1], words[2]))        #
+                                                                     #
+for rowList in myPuzz:                                               #
+    for char in rowList:                                             #
+        print(char+" ", end="")                                      #
+    print()                                                          #
+######################################################################
